@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:search_cep_bloc/src/pages/index/search_cep_bloc.dart';
+import 'package:search_cep_bloc/src/pages/index/search_cep_state.dart';
 
 class IndexPage extends StatelessWidget {
   final TextEditingController _inputController = TextEditingController();
