@@ -37,24 +37,31 @@ class IndexPage extends StatelessWidget {
           StreamBuilder(
             stream: _stream.result,
             builder: (context, snapshot) {
-              bool isLoading = snapshot.connectionState == ConnectionState.waiting; 
+              if (!snapshot.hasData) {
+                return Container();
+              }
 
-              if (snapshot.hasError) {
+              final state = snapshot.data;
+
+              if (state is SearchCepError) {
                 return Text(
-                  snapshot.error.toString(),
+                  state.message,
                   style: const TextStyle(color: Colors.red),
                 );
-              } else if (!snapshot.hasData) {
-                return Container();
-              } else if (isLoading) {
-                return const Expanded(
-                  child: Center(
+              }
+
+              if (state is SearchCepLoading) {
+                return const Padding(
+                  padding: EdgeInsets.all(32),
+                  child: SizedBox.square(
+                    dimension: 32,
                     child: CircularProgressIndicator(),
                   ),
                 );
               }
-              final data = snapshot.data!;
-              return Text('City: ${data['localidade']}');
+
+              final cep = state as SearchCepSuccess;
+              return Text('City: ${cep.data['localidade']}');
             },
           )
         ],
